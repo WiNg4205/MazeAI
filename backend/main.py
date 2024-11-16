@@ -1,9 +1,15 @@
 import random
-from flask import Flask, jsonify
+from flask import Flask, jsonify, request
 from flask_cors import CORS
 
 app = Flask(__name__)
 CORS(app)
+
+sizeMap = {
+    "EASY": 21,
+    "MEDIUM": 31,
+    "HARD": 51
+}
 
 def initialize_grid(rows, cols):
     return [["#"] * cols for _ in range(rows)]
@@ -21,10 +27,11 @@ def generate_maze(grid, row, col):
 
 @app.route('/new_maze', methods=['GET'])
 def new_grid():
-    rows, cols = 31, 31
+    difficulty = request.args.get('difficulty')
+    print(difficulty)
+    rows, cols = sizeMap[difficulty], sizeMap[difficulty]
     maze = initialize_grid(rows, cols)
-    maze[1][1] = " "
-    generate_maze(maze, 1, 1)
+    generate_maze(maze, rows-2, cols-2)
 
     maze[1][1] = "S"
     maze[rows - 2][cols - 2] = "E"
