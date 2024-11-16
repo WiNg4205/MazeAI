@@ -10,13 +10,13 @@ export default function Home() {
 
   useEffect(() => {
     const fetchMaze = async () => {
-      const response = await fetch(`http://127.0.0.1:5000/new_maze?difficulty=${difficulty}`, {
+      const response = await fetch(`${process.env.NEXT_PUBLIC_API}?difficulty=${difficulty}`, {
         method: 'GET',
         headers: { 'Content-Type': 'application/json' }
       });
 
-      const gridData: GridData = await response.json();
-      setGrid(gridData);
+      const data = await response.json();
+      setGrid(data["maze"]);
     };
 
     fetchMaze();
@@ -29,12 +29,7 @@ export default function Home() {
         <button className={`text-xl px-4 py-2 ${difficulty === "MEDIUM" ? "bg-neutral-500" : ""}`} onClick={() => setDifficulty("MEDIUM")}>Medium</button>
         <button className={`text-xl px-4 py-2 ${difficulty === "HARD" ? "bg-neutral-500" : ""}`} onClick={() => setDifficulty("HARD")}>Hard</button>
       </div>
-
-      {grid ? (
-        <Maze grid={grid} difficulty={difficulty} />
-      ) : (
-        <p>Loading maze...</p>
-      )}
+      {grid ? <Maze grid={grid} difficulty={difficulty} /> : <div>Loading grid...</div>}
     </div>
   );
 }

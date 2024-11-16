@@ -28,7 +28,6 @@ def generate_maze(grid, row, col):
 @app.route('/new_maze', methods=['GET'])
 def new_grid():
     difficulty = request.args.get('difficulty')
-    print(difficulty)
     rows, cols = sizeMap[difficulty], sizeMap[difficulty]
     maze = initialize_grid(rows, cols)
     generate_maze(maze, rows-2, cols-2)
@@ -36,7 +35,7 @@ def new_grid():
     maze[1][1] = "S"
     maze[rows - 2][cols - 2] = "E"
     
-    return jsonify(maze)
+    return jsonify(maze=maze)
 
 if __name__ == '__main__':
     app.run(debug=True)
