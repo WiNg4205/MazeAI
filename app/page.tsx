@@ -1,28 +1,28 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { Difficulty, GridData } from "@/app/types/maze";
 import Maze from "@/app/components/Maze";
 
 export default function Home() {
   const [difficulty, setDifficulty] = useState<Difficulty>("MEDIUM");
   const [grid, setGrid] = useState<GridData | null>(null);
-  const [solved, setSolved] = useState<Boolean>(false);
+  const [solved, setSolved] = useState<boolean>(false);
 
-  const fetchMaze = async () => {
+  const fetchMaze = useCallback(async () => {
     setSolved(false);
     const response = await fetch(`${process.env.NEXT_PUBLIC_MAZE}?difficulty=${difficulty}`, {
       method: 'GET',
       headers: { 'Content-Type': 'application/json' }
     });
-
+  
     const data = await response.json();
     setGrid(data["maze"]);
-  };
+  }, [difficulty]);
 
   useEffect(() => {
     fetchMaze();
-  }, [difficulty]);
+  }, [fetchMaze]);
 
   const fetchSolution = async () => {
     if (solved) return;
