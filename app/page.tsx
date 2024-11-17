@@ -26,17 +26,16 @@ export default function Home() {
 
   const fetchSolution = async () => {
     if (solved) return;
-    const serializedGrid = JSON.stringify(grid);
-    const encodedGrid = encodeURIComponent(serializedGrid);
-    const response = await fetch(`${process.env.NEXT_PUBLIC_SOLVE}?maze=${encodedGrid}&algorithm=bfs`, {
-      method: 'GET',
+    const response = await fetch(`${process.env.NEXT_PUBLIC_SOLVE}`, {
+      method: 'POST',
       headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ maze: grid, algorithm: "bfs" })
     });
 
     const data = await response.json();
     const visited = data["visited"];
     const path = data["path"];
-
+    setSolved(true);
     for (const [row, col] of visited.slice(1)) {
       setGrid(prevGrid => {
         const grid = prevGrid || [];
@@ -47,7 +46,7 @@ export default function Home() {
         return newGrid;
       });
 
-      await new Promise(resolve => setTimeout(resolve, 20));
+      await new Promise(resolve => setTimeout(resolve, 10));
     }
 
     for (const [row, col] of path.slice(1, -1)) {
@@ -60,10 +59,10 @@ export default function Home() {
         return newGrid;
       });
 
-      await new Promise(resolve => setTimeout(resolve, 20));
+      await new Promise(resolve => setTimeout(resolve, 10));
     }
 
-    setSolved(true);
+    
   };
 
   const resetMaze = async () => {

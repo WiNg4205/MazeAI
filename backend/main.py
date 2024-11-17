@@ -39,11 +39,10 @@ def new_maze():
     
     return jsonify(maze=maze)
 
-@app.route('/solve_maze', methods=['GET'])
+@app.route('/solve_maze', methods=['POST'])
 def solve_maze():
-    maze = request.args.get('maze')
-    maze = json.loads(maze)
-    algorithm = request.args.get('algorithm')
+    maze = request.json.get('maze')
+    algorithm = request.json.get('algorithm')
     path = []
 
     if algorithm == "bfs":
