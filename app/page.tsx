@@ -11,7 +11,7 @@ export default function Home() {
 
   const fetchMaze = async () => {
     setSolved(false);
-    const response = await fetch(`${process.env.NEXT_PUBLIC_API}?difficulty=${difficulty}`, {
+    const response = await fetch(`${process.env.NEXT_PUBLIC_MAZE}?difficulty=${difficulty}`, {
       method: 'GET',
       headers: { 'Content-Type': 'application/json' }
     });
