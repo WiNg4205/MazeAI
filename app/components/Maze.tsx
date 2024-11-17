@@ -25,14 +25,15 @@ export default function Maze({ grid, difficulty }: Props) {
           row.map((cell: CellType, cellIndex: number) => (
             <div
               key={`${rowIndex}-${cellIndex}`}
-              className={`size-6 flex items-center justify-center text-xs font-bold ${
-                cell === '#' ? 'bg-gray-800 text-white' :
-                cell === 'S' ? 'bg-green-500 text-white' :
-                cell === 'E' ? 'bg-red-500 text-white' :
+              className={`size-4 flex items-center justify-center text-xs font-bold ${
+                cell === '#' ? 'bg-gray-800' :
+                cell === 'S' ? 'bg-green-800' :
+                cell === 'V' ? 'bg-green-200' :
+                cell === 'P' ? 'bg-green-400' :
+                cell === 'E' ? 'bg-red-500' :
                 'bg-white'
               }`}
             >
-              {cell !== ' ' ? cell : ''}
             </div>
           ))
         )}
