@@ -98,6 +98,7 @@ export default function Home() {
                 <option value="bfs">Breadth-First Search (BFS)</option>
                 <option value="dfs">Depth-First Search (DFS)</option>
                 <option value="a_star">A* Search</option>
+                <option value="q_learning">Q-Learning</option>
               </select>
               <button
                 className="bg-blue-500 text-white px-4 py-2 rounded"
