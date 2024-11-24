@@ -1,5 +1,9 @@
 from collections import deque
 import heapq
+import random
+import numpy as np
+
+from test import get_next_state, get_reward
 
 DIRECTIONS = [(-1, 0), (1, 0), (0, -1), (0, 1)]
 
@@ -83,6 +87,51 @@ def a_star(maze):
                     f_score = tentative_g_score + heuristic(neighbor, end)
                     heapq.heappush(open_list, (f_score, tentative_g_score, neighbor))
                     parent[neighbor] = current
+                    
+def q_learning(maze):
+    alpha = 0.1  # Learning rate
+    gamma = 0.9  # Discount factor
+    epsilon = 0.1  # Exploration rate
+    episodes = 500
+    rows = cols = len(maze)
+    
+    action_count = len(DIRECTIONS)
+    q_table = np.zeros((rows, cols, action_count))
+    
+    for episode in range(episodes):
+        state = (1, 1)
+        while state != (rows - 2, cols - 2):
+            if random.uniform(0, 1) < epsilon:
+                action = random.randint(0, action_count - 1)
+            else:
+                action = np.argmax(q_table[state[0], state[1]])
+            
+            next_state = get_next_state(state, action)
+            reward = get_reward(next_state)
+            
+            current_q = q_table[state[0], state[1], action]
+            max_future_q = np.max(q_table[next_state[0], next_state[1]])
+            new_q = current_q + alpha * (reward + gamma * max_future_q - current_q)
+            q_table[state[0], state[1], action] = new_q
+            
+            state = next_state
+            
+    state = (1, 1)
+    path = [state]
+
+    while state != (rows - 2, cols - 2):
+        action = np.argmax(q_table[state[0], state[1]])
+        next_state = get_next_state(state, action)
+
+        if next_state == state:
+            print("Stuck! No valid moves.")
+            break
+
+        path.append(next_state)
+        state = next_state
+        
+    return path, []
+    
 
 def reconstruct_path(parent, start, end):
     path = []

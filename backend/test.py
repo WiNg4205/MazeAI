@@ -16,12 +16,15 @@ def generate_maze(grid, row, col):
             grid[new_row][new_col] = " "
             generate_maze(grid, new_row, new_col)
             
-rows = cols = 11
+rows = cols = 21
 maze = initialize_grid(rows, cols)
 generate_maze(maze, rows-2, cols-2)
 
+
 maze[1][1] = "S"
 maze[rows - 2][cols - 2] = "E"
+for row in maze:
+    print(" ".join(row))
 
 alpha = 0.1  # Learning rate
 gamma = 0.9  # Discount factor
@@ -70,15 +73,14 @@ for episode in range(episodes):
         
         state = next_state
 
-print("Trained Q-table:")
-print(q_table)
+# print("Trained Q-table:")
+# print(q_table)
 
 def run_path(q_table):
     state = (1, 1)
     path = [state]
 
     while state != (rows - 2, cols - 2):
-        # print(state)
         action = np.argmax(q_table[state[0], state[1]])
         next_state = get_next_state(state, action)
 
@@ -91,8 +93,8 @@ def run_path(q_table):
 
     return path
 
-optimal_path = run_path(q_table, maze)
-print("Optimal Path:", optimal_path)
+optimal_path = run_path(q_table)
+# print("Optimal Path:", optimal_path)
 
 def display_path(path, maze):
     maze_copy = [row[:] for row in maze]
@@ -101,4 +103,4 @@ def display_path(path, maze):
     for row in maze_copy:
         print(" ".join(str(cell) if cell != "*" else "*" for cell in row))
 
-display_path(optimal_path, maze)
+# display_path(optimal_path, maze)

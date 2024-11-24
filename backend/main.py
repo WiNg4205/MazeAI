@@ -1,7 +1,7 @@
 import random
 from flask import Flask, jsonify, request
 from flask_cors import CORS
-from algorithms import a_star, bfs, dfs
+from algorithms import a_star, bfs, dfs, q_learning
 
 
 app = Flask(__name__)
@@ -43,6 +43,8 @@ def new_maze():
 def solve_maze():
     maze = request.json.get('maze')
     algorithm = request.json.get('algorithm')
+    for row in maze:
+        print(" ".join(row))
 
     if algorithm == "bfs":
         path, visited = bfs(maze)
@@ -50,6 +52,9 @@ def solve_maze():
         path, visited = dfs(maze)
     elif algorithm == "a_star":
         path, visited = a_star(maze)
+    elif algorithm == "q_learning":
+        path, visited = q_learning(maze)
+        print(path, visited, 123)
         
     path.reverse()
     return jsonify(path=path, visited=visited)
